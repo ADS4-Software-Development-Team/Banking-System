@@ -4,518 +4,958 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SecureBank | Account Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 🌐 Modern Theme */
         :root {
-            --primary-blue: #1a4b8c;
-            --secondary-blue: #2c6cbf;
-            --light-blue: #e8f2ff;
-            --primary-green: #2e8b57;
-            --secondary-green: #4caf50;
-            --light-green: #e8f5e9;
-            --dark-text: #333;
-            --light-text: #fff;
-            --gray-bg: #f5f7fa;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          --primary-blue: #2563eb;
+          --secondary-blue: #1e40af;
+          --accent-blue: #3b82f6;
+          --primary-green: #16a34a;
+          --secondary-green: #22c55e;
+          --background: #f8fafc;
+          --white: #ffffff;
+          --text-dark: #1e293b;
+          --text-light: #64748b;
+          --border-radius: 1rem;
+          --glass: rgba(255, 255, 255, 0.7);
+          --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+          --blur: 20px;
+          --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
+        /* 🔤 Reset + Font */
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Inter", "Segoe UI", Tahoma, sans-serif;
         }
 
         body {
-            background-color: var(--gray-bg);
-            color: var(--dark-text);
-            line-height: 1.6;
+          background: var(--background);
+          color: var(--text-dark);
+          line-height: 1.7;
+          overflow-x: hidden;
+          display: flex;
+          min-height: 100vh;
         }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: var(--light-text);
-            padding: 1.5rem 2rem;
-            box-shadow: var(--box-shadow);
-        }
-
-        .header-container {
+        /* Sidebar styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 2rem 1.5rem;
+            box-shadow: var(--shadow);
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            transition: var(--transition);
+            z-index: 100;
         }
 
-        .logo {
+        .sidebar .logo {
+            margin-bottom: 3rem;
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 10px;
         }
 
-        .logo h1 {
+        .sidebar .logo h1 {
             font-size: 1.8rem;
             font-weight: 700;
+            color: white;
         }
 
-        .logo-icon {
-            font-size: 2rem;
+        .sidebar .logo-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        nav ul {
+        .sidebar nav ul {
             display: flex;
+            flex-direction: column;
+            gap: 1rem;
             list-style: none;
-            gap: 2rem;
+            width: 100%;
         }
 
-        nav a {
-            color: var(--light-text);
+        .sidebar nav a {
+            color: #f3f6fa;
             text-decoration: none;
             font-weight: 500;
-            transition: opacity 0.3s;
-        }
-
-        nav a:hover {
-            opacity: 0.8;
-        }
-
-        .user-info {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
+        .sidebar nav a i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar .user-info {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+        }
+
+        .sidebar .user-avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background-color: var(--light-blue);
+            background: var(--glass);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            color: var(--primary-blue);
+            backdrop-filter: blur(8px);
+            font-size: 1.2rem;
+            border: 2px solid white;
+        }
+        .sidebar .user-info span {
+            color: white;
+            font-weight: 500;
         }
 
+        /* Main content area */
+        .content-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--background);
+        }
+
+        /* Header */
+        header {
+          background: var(--white);
+          color: var(--text-dark);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          padding: 1.2rem 2rem;
+          border-bottom: 1px solid #e9ecef;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .header-container {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .header-actions {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+        }
+
+        .notification-icon {
+          position: relative;
+          font-size: 1.3rem;
+          color: var(--text-light);
+          cursor: pointer;
+          transition: var(--transition);
+        }
+
+        .notification-icon:hover {
+          color: var(--primary-blue);
+        }
+
+        .notification-badge {
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          background: var(--primary-green);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .user-avatar {
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        header .user-info span {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Main content */
         main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+          flex-grow: 1;
+          max-width: 100%;
+          margin: 2.5rem auto;
+          padding: 0 2rem;
+          animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
         }
 
         .dashboard-header h2 {
-            color: var(--primary-blue);
-            font-size: 1.8rem;
+          font-size: 2rem;
+          color: var(--text-dark);
+          font-weight: 700;
         }
 
         .create-account-btn {
-            background-color: var(--primary-green);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+          background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+          color: white;
+          border: none;
+          padding: 0.9rem 1.6rem;
+          border-radius: var(--border-radius);
+          cursor: pointer;
+          font-weight: 600;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          box-shadow: var(--shadow);
         }
 
         .create-account-btn:hover {
-            background-color: var(--secondary-green);
+          transform: translateY(-2px);
+          box-shadow: 0 12px 20px rgba(22, 163, 74, 0.3);
         }
 
+        /* Account cards */
         .accounts-section {
-            margin-bottom: 3rem;
+          margin-bottom: 3rem;
         }
 
         .section-title {
-            color: var(--primary-blue);
-            margin-bottom: 1.5rem;
-            font-size: 1.4rem;
-            border-bottom: 2px solid var(--light-blue);
-            padding-bottom: 0.5rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--text-dark);
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid rgba(37, 99, 235, 0.1);
         }
 
         .accounts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 1.5rem;
         }
 
         .account-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            box-shadow: var(--box-shadow);
-            transition: transform 0.3s;
-            border-left: 4px solid var(--primary-blue);
+          background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+          border-radius: 1.5rem;
+          padding: 2rem 1.8rem;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+          backdrop-filter: blur(14px);
+          position: relative;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          transition: var(--transition);
+          transform: translateY(0);
+        }
+
+        .account-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(16,185,129,0.08));
+          opacity: 0;
+          transition: var(--transition);
         }
 
         .account-card:hover {
-            transform: translateY(-5px);
+          transform: translateY(-10px) scale(1.02);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .account-card:hover::before {
+          opacity: 1;
         }
 
         .account-type {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.3rem;
         }
 
         .account-type h3 {
-            color: var(--primary-blue);
-            font-size: 1.2rem;
+          font-size: 1.3rem;
+          color: var(--primary-blue);
+          font-weight: 700;
+          letter-spacing: 0.3px;
         }
 
         .account-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.4rem;
+          color: white;
+          box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
+          transition: var(--transition);
         }
 
-        .checking .account-icon {
-            background-color: var(--primary-blue);
+        .account-card:hover .account-icon {
+          transform: rotate(8deg) scale(1.1);
         }
 
-        .savings .account-icon {
-            background-color: var(--primary-green);
-        }
-
-        .business .account-icon {
-            background-color: #8a2be2;
-        }
-
-        .credit .account-icon {
-            background-color: #ff6b35;
-        }
+        /* Enhanced color gradients per account type */
+        .checking .account-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .savings .account-icon { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .business .account-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .credit .account-icon { background: linear-gradient(135deg, #f97316, #ea580c); }
 
         .account-balance {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+          font-size: 1.8rem;
+          font-weight: 800;
+          color: var(--text-dark);
+          margin-bottom: 0.3rem;
+          letter-spacing: 0.5px;
         }
 
         .account-number {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+          color: var(--text-light);
+          font-size: 0.95rem;
+          margin-bottom: 1.5rem;
         }
 
+        /* Account buttons */
         .account-actions {
-            display: flex;
-            gap: 10px;
+          display: flex;
+          gap: 0.8rem;
         }
 
         .account-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
+          flex: 1;
+          border: none;
+          border-radius: 12px;
+          padding: 0.8rem 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: var(--transition);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .account-btn::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.2);
+          transition: left 0.35s ease;
+        }
+
+        .account-btn:hover::after {
+          left: 0;
         }
 
         .primary-btn {
-            background-color: var(--primary-blue);
-            color: white;
+          background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+          color: white;
+          box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
 
         .primary-btn:hover {
-            background-color: var(--secondary-blue);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
         }
 
         .secondary-btn {
-            background-color: var(--light-blue);
-            color: var(--primary-blue);
+          background: linear-gradient(135deg, #e0e7ff, #eef2ff);
+          color: var(--primary-blue);
+          border: 1px solid #dbeafe;
         }
 
         .secondary-btn:hover {
-            background-color: #d4e4f7;
+          background: linear-gradient(135deg, #dbeafe, #c7d2fe);
+          transform: translateY(-2px);
         }
 
+        /* 🌟 Floating glow on hover */
+        .account-card:hover {
+          box-shadow: 0 12px 25px rgba(37, 99, 235, 0.1), 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* 🪟 Modal Styles (Glassmorphism) */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 23, 42, 0.55);
+          backdrop-filter: blur(10px);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+          animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--box-shadow);
-            overflow: hidden;
+          background: var(--glass);
+          backdrop-filter: blur(var(--blur));
+          border-radius: var(--border-radius);
+          width: 90%;
+          max-width: 460px;
+          box-shadow: var(--shadow);
+          overflow: hidden;
+          animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+          from { transform: translateY(30px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            font-size: 1.4rem;
+          background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+          color: white;
+          padding: 1.2rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
 
         .close-modal {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+          transition: var(--transition);
+        }
+
+        .close-modal:hover {
+          transform: scale(1.1);
         }
 
         .modal-body {
-            padding: 1.5rem;
+          padding: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+          margin-bottom: 1.3rem;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--primary-blue);
+        label {
+          font-weight: 500;
+          color: var(--primary-blue);
+          margin-bottom: 0.5rem;
+          display: block;
         }
 
-        .form-group select,
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
+        input, select {
+          width: 100%;
+          padding: 0.8rem;
+          border-radius: 8px;
+          border: 1px solid #ddd;
+          background: #fafafa;
+          transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+          border-color: var(--accent-blue);
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .account-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+          gap: 1rem;
         }
 
         .account-option {
-            border: 2px solid #ddd;
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
+          border: 2px solid transparent;
+          border-radius: var(--border-radius);
+          padding: 1rem;
+          text-align: center;
+          background: rgba(255,255,255,0.5);
+          cursor: pointer;
+          transition: var(--transition);
         }
 
         .account-option:hover {
-            border-color: var(--primary-blue);
+          transform: translateY(-3px);
+          border-color: var(--accent-blue);
         }
 
         .account-option.selected {
-            border-color: var(--primary-green);
-            background-color: var(--light-green);
+          border-color: var(--primary-green);
+          background: rgba(22, 163, 74, 0.1);
         }
 
         .account-option-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+          font-size: 2rem;
+          margin-bottom: 0.4rem;
         }
 
         .modal-footer {
-            padding: 1rem 1.5rem;
-            background-color: var(--gray-bg);
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
+          background: var(--background);
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+          padding: 1rem 1.5rem;
+        }
+
+        .cancel-btn, .submit-btn {
+          padding: 0.8rem 1.5rem;
+          border: none;
+          border-radius: 8px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: var(--transition);
         }
 
         .cancel-btn {
-            background-color: #f0f0f0;
-            color: #666;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
+          background: #e5e7eb;
+          color: #374151;
         }
 
         .cancel-btn:hover {
-            background-color: #e0e0e0;
+          background: #d1d5db;
         }
 
         .submit-btn {
-            background-color: var(--primary-green);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
+          background: var(--primary-green);
+          color: white;
         }
 
         .submit-btn:hover {
-            background-color: var(--secondary-green);
+          background: var(--secondary-green);
+          transform: translateY(-2px);
         }
 
+        /* ⚡ Footer */
         footer {
-            background-color: var(--primary-blue);
-            color: var(--light-text);
-            padding: 2rem;
-            margin-top: 3rem;
+          background: var(--primary-blue);
+          color: white;
+          padding: 2rem 1.5rem;
+          margin-top: auto;
+          box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
         }
 
         .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+          max-width: 1200px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 2rem;
         }
 
         .footer-section h4 {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
+          margin-bottom: 1rem;
+          font-size: 1.2rem;
         }
 
         .footer-section ul {
-            list-style: none;
+          list-style: none;
         }
 
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
+        .footer-section li {
+          margin-bottom: 0.5rem;
         }
 
         .footer-section a {
-            color: var(--light-text);
-            text-decoration: none;
-            transition: opacity 0.3s;
+          color: rgba(255,255,255,0.8);
+          text-decoration: none;
+          transition: color 0.3s ease;
         }
 
         .footer-section a:hover {
-            opacity: 0.8;
+          color: white;
         }
 
         .copyright {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+          text-align: center;
+          border-top: 1px solid rgba(255,255,255,0.2);
+          margin-top: 1.5rem;
+          padding-top: 1rem;
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+          .sidebar {
+            width: 240px;
+          }
         }
 
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
+          body {
+            flex-direction: column;
+          }
 
-            nav ul {
-                gap: 1rem;
-            }
+          .sidebar {
+            width: 100%;
+            height: auto;
+            position: relative;
+            padding: 1.5rem 1rem;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+          }
 
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
+          .sidebar .logo {
+            margin-bottom: 0;
+            flex-direction: row;
+            gap: 10px;
+          }
 
-            .account-options {
-                grid-template-columns: 1fr;
-            }
+          .sidebar .logo h1 {
+            font-size: 1.5rem;
+          }
+
+          .sidebar nav {
+            display: none;
+          }
+
+          .sidebar .user-info {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+            flex-direction: row;
+          }
+
+          header {
+            display: none;
+          }
+
+          main {
+            margin-top: 1.5rem;
+            padding: 0 1rem;
+          }
+
+          .dashboard-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+          }
+
+          .accounts-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .modal-content {
+            max-width: 95%;
+          }
+        }
+
+        /* Quick actions section */
+        .quick-actions {
+          display: flex;
+          gap: 1rem;
+          margin-bottom: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          background: white;
+          border: none;
+          border-radius: 12px;
+          padding: 1rem;
+          cursor: pointer;
+          transition: var(--transition);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+          min-width: 100px;
+        }
+
+        .quick-action-btn:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-action-icon {
+          width: 50px;
+          height: 50px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          color: white;
+        }
+
+        .quick-action-text {
+          font-weight: 500;
+          color: var(--text-dark);
+          font-size: 0.9rem;
+        }
+
+        /* Recent transactions */
+        .recent-transactions {
+          background: white;
+          border-radius: var(--border-radius);
+          padding: 1.5rem;
+          box-shadow: var(--shadow);
+          margin-top: 2rem;
+        }
+
+        .transaction-list {
+          list-style: none;
+        }
+
+        .transaction-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 0;
+          border-bottom: 1px solid #f1f5f9;
+        }
+
+        .transaction-item:last-child {
+          border-bottom: none;
+        }
+
+        .transaction-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .transaction-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1rem;
+        }
+
+        .transaction-details h4 {
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .transaction-details p {
+          color: var(--text-light);
+          font-size: 0.85rem;
+        }
+
+        .transaction-amount {
+          font-weight: 600;
+        }
+
+        .transaction-amount.positive {
+          color: var(--primary-green);
+        }
+
+        .transaction-amount.negative {
+          color: #ef4444;
         }
     </style>
 </head>
 <body>
-<header>
-    <div class="header-container">
-        <div class="logo">
-            <div class="logo-icon">🏦</div>
-            <h1>DekagoBank</h1>
+<div class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">🏦</div>
+        <h1>DekagoBank</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/dashboard" class="active"><i class="fas fa-wallet"></i> Dashboard</a></li>
+            <li><a href="/transfers"><i class="fas fa-exchange-alt"></i> Transfers</a></li>
+            <li><a href="/payments" ><i class="fas fa-credit-card"></i> Payments</a></li>
+        </ul>
+    </nav>
+    <div class="user-info">
+        <div class="user-avatar">JS</div>
+        <span>John Smith</span>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <header>
+        <div class="header-container">
+            <h2>Welcome back, John</h2>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#">Accounts</a></li>
-                <li><a href="#">Transfers</a></li>
-                <li><a href="#">Payments</a></li>
+        <div class="header-actions">
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">JS</div>
+                <span>John Smith</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard-header">
+            <h2>My Accounts</h2>
+            <button class="create-account-btn" id="openModal">
+                <i class="fas fa-plus"></i>
+                <span>Create New Account</span>
+            </button>
+        </div>
+
+        <div class="quick-actions">
+            <button class="quick-action-btn">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <span class="account-btn secondary-btn open-transfer-modal-btn">Transfer</span>
+            </button>
+            <button class="quick-action-btn">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <span class="quick-action-text">Pay Bills</span>
+            </button>
+            <button class="quick-action-btn">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <span class="quick-action-text">Mobile Top-up</span>
+            </button>
+            <button class="quick-action-btn">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <span class="quick-action-text">Budget</span>
+            </button>
+        </div>
+
+        <section class="accounts-section">
+            <h3 class="section-title">Current Accounts</h3>
+            <div class="accounts-grid">
+                <div class="account-card checking" data-account-number="4582" data-balance="12458.75">
+                    <div class="account-type">
+                        <h3>Checking Account</h3>
+                        <div class="account-icon"><i class="fas fa-credit-card"></i></div>
+                    </div>
+                    <div class="account-balance">$12,458.75</div>
+                    <div class="account-number">**** 4582</div>
+                    <div class="account-actions">
+                        <button class="account-btn primary-btn">View Details</button>
+                        <button class="account-btn secondary-btn open-transfer-modal-btn" data-source-account="4582">Transfer</button>
+                    </div>
+                </div>
+
+                <div class="account-card savings" data-account-number="7391" data-balance="8250.30">
+                    <div class="account-type">
+                        <h3>Savings Account</h3>
+                        <div class="account-icon"><i class="fas fa-piggy-bank"></i></div>
+                    </div>
+                    <div class="account-balance">$8,250.30</div>
+                    <div class="account-number">**** 7391</div>
+                    <div class="account-actions">
+                        <button class="account-btn primary-btn">View Details</button>
+                        <button class="account-btn secondary-btn open-transfer-modal-btn" data-source-account="7391">Transfer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="accounts-section">
+            <h3 class="section-title">Additional Accounts</h3>
+            <div class="accounts-grid" id="additionalAccounts">
+                <!-- Additional accounts will be added here dynamically -->
+            </div>
+        </section>
+
+        <div class="recent-transactions">
+            <h3 class="section-title">Recent Transactions</h3>
+            <ul class="transaction-list">
+                <li class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Amazon Purchase</h4>
+                            <p>June 12, 2023</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">-$89.99</div>
+                </li>
+                <li class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Salary Deposit</h4>
+                            <p>June 10, 2023</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">+$4,250.00</div>
+                </li>
+                <li class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Restaurant Payment</h4>
+                            <p>June 8, 2023</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">-$64.50</div>
+                </li>
             </ul>
-        </nav>
-        <div class="user-info">
-            <div class="user-avatar">JS</div>
-            <span>John Smith</span>
         </div>
-    </div>
-</header>
+    </main>
 
-<main>
-    <div class="dashboard-header">
-        <h2>My Accounts</h2>
-        <button class="create-account-btn" id="openModal">
-            <span>+</span> Create New Account
-        </button>
-    </div>
+    <footer>
 
-    <section class="accounts-section">
-        <h3 class="section-title">Current Accounts</h3>
-        <div class="accounts-grid">
-            <div class="account-card checking">
-                <div class="account-type">
-                    <h3>Checking Account</h3>
-                    <div class="account-icon">💳</div>
-                </div>
-                <div class="account-balance">$12,458.75</div>
-                <div class="account-number">**** 4582</div>
-                <div class="account-actions">
-                    <button class="account-btn primary-btn">View Details</button>
-                    <button class="account-btn secondary-btn">Transfer</button>
-                </div>
-            </div>
 
-            <div class="account-card savings">
-                <div class="account-type">
-                    <h3>Savings Account</h3>
-                    <div class="account-icon">💰</div>
-                </div>
-                <div class="account-balance">$8,250.30</div>
-                <div class="account-number">**** 7391</div>
-                <div class="account-actions">
-                    <button class="account-btn primary-btn">View Details</button>
-                    <button class="account-btn secondary-btn">Transfer</button>
-                </div>
-            </div>
+        <div class="copyright">
+            <p>&copy; 2025 DekagoBank. All rights reserved.</p>
         </div>
-    </section>
-
-    <section class="accounts-section">
-        <h3 class="section-title">Additional Accounts</h3>
-        <div class="accounts-grid" id="additionalAccounts">
-            <!-- Additional accounts will be added here dynamically -->
-        </div>
-    </section>
-</main>
+    </footer>
+</div>
 
 <!-- Create Account Modal -->
 <div class="modal" id="createAccountModal">
@@ -557,75 +997,66 @@
     </div>
 </div>
 
-<footer>
-    <div class="footer-content">
-        <div class="footer-section">
-            <h4>SecureBank</h4>
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">News</a></li>
-            </ul>
+<!-- Transfer Modal -->
+<div class="modal" id="transferModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Transfer Funds</h3>
+            <button class="close-modal" id="closeTransferModal">&times;</button>
         </div>
-        <div class="footer-section">
-            <h4>Accounts</h4>
-            <ul>
-                <li><a href="#">Checking</a></li>
-                <li><a href="#">Savings</a></li>
-                <li><a href="#">Business</a></li>
-                <li><a href="#">Credit</a></li>
-            </ul>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="sourceAccount">From Account</label>
+                <select id="sourceAccount">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="destinationAccount">To Account</label>
+                <select id="destinationAccount">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transferAmount">Amount</label>
+                <input type="number" id="transferAmount" placeholder="Enter amount">
+            </div>
         </div>
-        <div class="footer-section">
-            <h4>Support</h4>
-            <ul>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Security</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h4>Legal</h4>
-            <ul>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Disclosures</a></li>
-            </ul>
+        <div class="modal-footer">
+            <button class="cancel-btn" id="cancelTransfer">Cancel</button>
+            <button class="submit-btn" id="submitTransfer">Transfer</button>
         </div>
     </div>
-    <div class="copyright">
-        <p>&copy; 2025 DekagoBank. All rights reserved.</p>
-    </div>
-</footer>
+</div>
 
 <script>
     // Modal functionality
     const openModalBtn = document.getElementById('openModal');
     const closeModalBtn = document.getElementById('closeModal');
     const cancelCreateBtn = document.getElementById('cancelCreate');
-    const modal = document.getElementById('createAccountModal');
+    const createAccountModal = document.getElementById('createAccountModal');
     const accountOptions = document.querySelectorAll('.account-option');
     const submitCreateBtn = document.getElementById('submitCreate');
     const additionalAccountsContainer = document.getElementById('additionalAccounts');
 
     let selectedAccountType = '';
 
-    // Open modal
+    // Open create account modal
     openModalBtn.addEventListener('click', () => {
-        modal.style.display = 'flex';
+        createAccountModal.style.display = 'flex';
     });
 
-    // Close modal
-    function closeModal() {
-        modal.style.display = 'none';
+    // Close create account modal
+    function closeCreateAccountModal() {
+        createAccountModal.style.display = 'none';
         // Reset form
         selectedAccountType = '';
         document.getElementById('initialDeposit').value = '';
         accountOptions.forEach(option => option.classList.remove('selected'));
     }
 
-    closeModalBtn.addEventListener('click', closeModal);
-    cancelCreateBtn.addEventListener('click', closeModal);
+    closeModalBtn.addEventListener('click', closeCreateAccountModal);
+    cancelCreateBtn.addEventListener('click', closeCreateAccountModal);
 
     // Select account type
     accountOptions.forEach(option => {
@@ -638,23 +1069,23 @@
 
     // Create account
     submitCreateBtn.addEventListener('click', () => {
-        const initialDeposit = document.getElementById('initialDeposit').value;
+        const initialDeposit = parseFloat(document.getElementById('initialDeposit').value);
 
         if (!selectedAccountType) {
             alert('Please select an account type');
             return;
         }
 
-        if (!initialDeposit || initialDeposit <= 0) {
+        if (isNaN(initialDeposit) || initialDeposit <= 0) {
             alert('Please enter a valid initial deposit amount');
             return;
         }
 
         // Create new account card
         const accountTypes = {
-            'savings': { name: 'Savings Account', icon: '💰', colorClass: 'savings' },
-            'business': { name: 'Business Account', icon: '🏢', colorClass: 'business' },
-            'credit': { name: 'Credit Account', icon: '💳', colorClass: 'credit' }
+            'savings': { name: 'Savings Account', icon: '<i class="fas fa-piggy-bank"></i>', colorClass: 'savings' },
+            'business': { name: 'Business Account', icon: '<i class="fas fa-briefcase"></i>', colorClass: 'business' },
+            'credit': { name: 'Credit Account', icon: '<i class="fas fa-credit-card"></i>', colorClass: 'credit' }
         };
 
         const accountType = accountTypes[selectedAccountType];
@@ -662,16 +1093,18 @@
 
         const newAccountCard = document.createElement('div');
         newAccountCard.className = `account-card ${accountType.colorClass}`;
+        newAccountCard.setAttribute('data-account-number', accountNumber);
+        newAccountCard.setAttribute('data-balance', initialDeposit.toFixed(2));
         newAccountCard.innerHTML = `
             <div class="account-type">
                 <h3>${accountType.name}</h3>
                 <div class="account-icon">${accountType.icon}</div>
             </div>
-            <div class="account-balance">$${parseFloat(initialDeposit).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
+            <div class="account-balance">$${initialDeposit.toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
             <div class="account-number">**** ${accountNumber}</div>
             <div class="account-actions">
                 <button class="account-btn primary-btn">View Details</button>
-                <button class="account-btn secondary-btn">Transfer</button>
+                <button class="account-btn secondary-btn open-transfer-modal-btn" data-source-account="${accountNumber}">Transfer</button>
             </div>
         `;
 
@@ -681,7 +1114,119 @@
         alert(`Your new ${accountType.name} has been created successfully!`);
 
         // Close modal
-        closeModal();
+        closeCreateAccountModal();
+        attachTransferButtonListeners(); // Re-attach listeners for new buttons
+    });
+
+    // Transfer Modal functionality
+    const transferModal = document.getElementById('transferModal');
+    const closeTransferModalBtn = document.getElementById('closeTransferModal');
+    const cancelTransferBtn = document.getElementById('cancelTransfer');
+    const submitTransferBtn = document.getElementById('submitTransfer');
+    const sourceAccountSelect = document.getElementById('sourceAccount');
+    const destinationAccountSelect = document.getElementById('destinationAccount');
+    const transferAmountInput = document.getElementById('transferAmount');
+
+    let allAccounts = []; // To store all account data
+
+    function populateAccountDropdowns(excludeAccountNumber = null) {
+        sourceAccountSelect.innerHTML = '';
+        destinationAccountSelect.innerHTML = '';
+
+        const currentAccounts = Array.from(document.querySelectorAll('.accounts-grid .account-card'));
+        allAccounts = currentAccounts.map(card => ({
+            number: card.getAttribute('data-account-number'),
+            name: card.querySelector('h3').textContent,
+            balance: parseFloat(card.getAttribute('data-balance')),
+            element: card
+        }));
+
+        allAccounts.forEach(account => {
+            const optionSource = document.createElement('option');
+            optionSource.value = account.number;
+            optionSource.textContent = `${account.name} (**** ${account.number}) - $${account.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            sourceAccountSelect.appendChild(optionSource);
+
+            const optionDestination = document.createElement('option');
+            optionDestination.value = account.number;
+            optionDestination.textContent = `${account.name} (**** ${account.number}) - $${account.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            destinationAccountSelect.appendChild(optionDestination);
+        });
+
+        // Pre-select source account if provided
+        if (excludeAccountNumber) {
+            sourceAccountSelect.value = excludeAccountNumber;
+        }
+    }
+
+    function openTransferModal(sourceAccountNumber = null) {
+        populateAccountDropdowns(sourceAccountNumber);
+        transferModal.style.display = 'flex';
+    }
+
+    function closeTransferModal() {
+        transferModal.style.display = 'none';
+        transferAmountInput.value = '';
+    }
+
+    closeTransferModalBtn.addEventListener('click', closeTransferModal);
+    cancelTransferBtn.addEventListener('click', closeTransferModal);
+
+    function attachTransferButtonListeners() {
+        document.querySelectorAll('.open-transfer-modal-btn').forEach(button => {
+            button.onclick = (event) => {
+                const sourceAccountNumber = event.target.getAttribute('data-source-account');
+                openTransferModal(sourceAccountNumber);
+            };
+        });
+    }
+
+    // Initial attachment of listeners
+    attachTransferButtonListeners();
+
+    submitTransferBtn.addEventListener('click', () => {
+        const sourceAccountNumber = sourceAccountSelect.value;
+        const destinationAccountNumber = destinationAccountSelect.value;
+        const transferAmount = parseFloat(transferAmountInput.value);
+
+        if (!sourceAccountNumber || !destinationAccountNumber) {
+            alert('Please select both source and destination accounts.');
+            return;
+        }
+
+        if (sourceAccountNumber === destinationAccountNumber) {
+            alert('Source and destination accounts cannot be the same.');
+            return;
+        }
+
+        if (isNaN(transferAmount) || transferAmount <= 0) {
+            alert('Please enter a valid transfer amount.');
+            return;
+        }
+
+        const sourceAccount = allAccounts.find(acc => acc.number === sourceAccountNumber);
+        const destinationAccount = allAccounts.find(acc => acc.number === destinationAccountNumber);
+
+        if (!sourceAccount || !destinationAccount) {
+            alert('Selected accounts not found.');
+            return;
+        }
+
+        if (sourceAccount.balance < transferAmount) {
+            alert('Insufficient funds in the source account.');
+            return;
+        }
+
+        // Perform the transfer (client-side simulation)
+        sourceAccount.balance -= transferAmount;
+        destinationAccount.balance += transferAmount;
+
+        // Update UI
+        sourceAccount.element.querySelector('.account-balance').textContent = `$${sourceAccount.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        destinationAccount.element.querySelector('.account-balance').textContent = `$${destinationAccount.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+
+        alert(`Successfully transferred $${transferAmount.toLocaleString('en-US', {minimumFractionDigits: 2})} from **** ${sourceAccountNumber} to **** ${destinationAccountNumber}.`);
+        closeTransferModal();
     });
 </script>
 </body>

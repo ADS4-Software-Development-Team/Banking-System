@@ -32,6 +32,16 @@ public class WebAccountController {
         return "addAccount"; // templates/dashboard.html
     }
 
+    @GetMapping("/payments")
+    public String showPayments() {
+        return "payments"; // templates/dashboard.html
+    }
+
+    @GetMapping("/transfers")
+    public String showTransfers() {
+        return "transfers"; // templates/dashboard.html
+    }
+
     @GetMapping("/addAccount")
     public String addAccount() {
         return "addAccount"; // templates/dashboard.html
