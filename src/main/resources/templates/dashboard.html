@@ -5,46 +5,511 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dekago Bank | Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e429f;
+            --secondary: #6b7280;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --sidebar-width: 250px;
+            --header-height: 70px;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid white;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        .welcome-section {
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .welcome-section p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Accounts Section */
+        .accounts-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .account-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .account-card p {
+            margin-bottom: 8px;
+            color: var(--secondary);
+        }
+
+        .account-balance {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 15px 0;
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-light {
+            background-color: var(--light);
+            color: var(--dark);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .btn-light:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Transactions Section */
+        .transaction-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 40px;
+        }
+
+        .transaction-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .transaction-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .transaction-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Recent Transactions */
+        .recent-transactions {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .recent-transactions h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8fafc;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+
+            .sidebar .logo span, .sidebar-menu a span {
+                display: none;
+            }
+
+            .sidebar-menu a {
+                justify-content: center;
+                padding: 15px;
+            }
+
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 15px;
+            }
+
+            .dashboard-content {
+                padding: 15px;
+            }
+
+            .accounts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .transaction-form {
+                grid-template-columns: 1fr;
+            }
+
+            .account-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<header>
-    <div class="container header-container">
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <div class="sidebar-header">
         <div class="logo">
             <i class="fas fa-university"></i>
             <span>Dekago Bank</span>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/openAccount">Open Account</a></li>
-                <li><a href="/login">Logout</a></li>
-            </ul>
-        </nav>
     </div>
-</header>
+    <nav class="sidebar-menu">
+        <ul>
+            <li><a href="#" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="#"><i class="fas fa-wallet"></i> <span>Accounts</span></a></li>
+            <li><a href="#"><i class="fas fa-exchange-alt"></i> <span>Transactions</span></a></li>
+            <li><a href="#"><i class="fas fa-money-bill-transfer"></i> <span>Transfers</span></a></li>
+            <li><a href="#"><i class="fas fa-credit-card"></i> <span>Cards</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-line"></i> <span>Analytics</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> <span>Support</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </nav>
+</div>
 
-<main class="dashboard-section">
-    <div class="container">
-        <h1>Good Day, User!</h1>
-        <p>Manage your accounts and transactions efficiently below:</p>
+<!-- Main Content -->
+<div class="main-content">
+    <!-- Header -->
+    <header class="header">
+        <h1>Bank Dashboard</h1>
+        <div class="header-actions">
+            <button class="btn btn-secondary">
+                <i class="fas fa-archive"></i> View Archived Accounts
+            </button>
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create Account
+            </button>
+        </div>
+    </header>
 
-        <!-- Accounts Overview -->
-        <section class="account-overview">
-            <h2>Your Accounts</h2>
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1>Good Day, User!</h1>
+            <p>Manage your accounts and transactions efficiently below:</p>
+        </section>
+
+        <!-- Accounts Section -->
+        <section class="accounts-section">
+            <div class="section-header">
+                <h2>Your Accounts</h2>
+            </div>
             <div class="accounts-grid">
+                <!-- Primary Savings Account -->
                 <div class="account-card">
                     <h3>Primary Savings</h3>
-                    <p>Type: Savings</p>
-                    <p>Balance: <strong>R5,000.00</strong></p>
+                    <p>Type: Savings Account</p>
+                    <p>Account No: **** 4582</p>
+                    <div class="account-balance">R5,000.00</div>
                     <div class="account-actions">
                         <button class="btn btn-light"><i class="fas fa-arrow-down"></i> Deposit</button>
                         <button class="btn btn-light"><i class="fas fa-arrow-up"></i> Withdraw</button>
                         <button class="btn btn-light"><i class="fas fa-exchange-alt"></i> Transfer</button>
                     </div>
                 </div>
-                <!-- More accounts can be added dynamically -->
+
+                <!-- Checking Account -->
+                <div class="account-card">
+                    <h3>Everyday Checking</h3>
+                    <p>Type: Checking Account</p>
+                    <p>Account No: **** 7821</p>
+                    <div class="account-balance">R12,350.75</div>
+                    <div class="account-actions">
+                        <button class="btn btn-light"><i class="fas fa-arrow-down"></i> Deposit</button>
+                        <button class="btn btn-light"><i class="fas fa-arrow-up"></i> Withdraw</button>
+                        <button class="btn btn-light"><i class="fas fa-exchange-alt"></i> Transfer</button>
+                    </div>
+                </div>
+
+                <!-- Investment Account -->
+                <div class="account-card">
+                    <h3>Investment Portfolio</h3>
+                    <p>Type: Investment Account</p>
+                    <p>Account No: **** 6394</p>
+                    <div class="account-balance">R45,200.50</div>
+                    <div class="account-actions">
+                        <button class="btn btn-light"><i class="fas fa-chart-line"></i> View</button>
+                        <button class="btn btn-light"><i class="fas fa-plus"></i> Add Funds</button>
+                        <button class="btn btn-light"><i class="fas fa-exchange-alt"></i> Transfer</button>
+                    </div>
+                </div>
+
+                <!-- Credit Card Account -->
+                <div class="account-card">
+                    <h3>Platinum Credit Card</h3>
+                    <p>Type: Credit Card</p>
+                    <p>Card No: **** 3157</p>
+                    <div class="account-balance">R2,450.00</div>
+                    <div class="account-actions">
+                        <button class="btn btn-light"><i class="fas fa-credit-card"></i> Pay</button>
+                        <button class="btn btn-light"><i class="fas fa-list"></i> Statement</button>
+                        <button class="btn btn-light"><i class="fas fa-cog"></i> Manage</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -55,7 +520,11 @@
                 <div class="form-group">
                     <label for="accountSelect">Select Account <span class="required">*</span></label>
                     <select id="accountSelect" required>
-                        <option value="">Primary Savings</option>
+                        <option value="">Choose Account</option>
+                        <option value="savings">Primary Savings</option>
+                        <option value="checking">Everyday Checking</option>
+                        <option value="investment">Investment Portfolio</option>
+                        <option value="credit">Platinum Credit Card</option>
                     </select>
                 </div>
 
@@ -79,9 +548,11 @@
                     <input type="text" id="transferTo" placeholder="Recipient Account Name">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <p id="transactionMessage" class="transaction-message"></p>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit Transaction</button>
+                </div>
             </form>
+            <p id="transactionMessage" class="transaction-message"></p>
         </section>
 
         <!-- Recent Transactions -->
@@ -105,40 +576,79 @@
                     <td>R1,200.00</td>
                     <td>R5,000.00</td>
                 </tr>
-                <!-- Transactions added dynamically -->
+                <tr>
+                    <td>2025-10-18</td>
+                    <td>Everyday Checking</td>
+                    <td>Withdrawal</td>
+                    <td>R500.00</td>
+                    <td>R12,350.75</td>
+                </tr>
+                <tr>
+                    <td>2025-10-15</td>
+                    <td>Investment Portfolio</td>
+                    <td>Dividend</td>
+                    <td>R350.50</td>
+                    <td>R45,200.50</td>
+                </tr>
+                <tr>
+                    <td>2025-10-10</td>
+                    <td>Platinum Credit Card</td>
+                    <td>Payment</td>
+                    <td>R750.00</td>
+                    <td>R2,450.00</td>
+                </tr>
                 </tbody>
             </table>
         </section>
     </div>
-</main>
 
-<footer>
-    <div class="container footer-container">
-        <p>&copy; 2025 Dekago Bank. All rights reserved.</p>
-    </div>
-</footer>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Dekago Bank. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
 
 <script>
+    // Show/hide transfer field based on transaction type
     document.getElementById('transactionType').addEventListener('change', function() {
         document.getElementById('transferToDiv').style.display =
             this.value === 'transfer' ? 'block' : 'none';
     });
 
+    // Handle form submission
     document.getElementById('transactionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const type = document.getElementById('transactionType').value;
         const amount = parseFloat(document.getElementById('amount').value);
+        const account = document.getElementById('accountSelect').value;
+
+        if (!type || !amount || !account) {
+            document.getElementById('transactionMessage').innerText =
+                "Error: Please fill in all required fields!";
+            document.getElementById('transactionMessage').style.color = "red";
+            document.getElementById('transactionMessage').style.backgroundColor = "#fee2e2";
+            return;
+        }
+
+        // Simple validation for withdrawal limit
         if (type === 'withdraw' && amount > 5000) {
             document.getElementById('transactionMessage').innerText =
-                "Error: Overdraft not allowed!";
+                "Error: Overdraft not allowed! Maximum withdrawal is R5,000.00";
             document.getElementById('transactionMessage').style.color = "red";
+            document.getElementById('transactionMessage').style.backgroundColor = "#fee2e2";
         } else {
             document.getElementById('transactionMessage').innerText =
-                `Success: ${type} of R${amount.toFixed(2)} completed!`;
+                `Success: ${type} of R${amount.toFixed(2)} from ${document.getElementById('accountSelect').options[document.getElementById('accountSelect').selectedIndex].text} completed!`;
             document.getElementById('transactionMessage').style.color = "green";
+            document.getElementById('transactionMessage').style.backgroundColor = "#d1fae5";
+
+            // Reset form
+            document.getElementById('transactionForm').reset();
+            document.getElementById('transferToDiv').style.display = 'none';
         }
     });
 </script>
-
 </body>
 </html>
