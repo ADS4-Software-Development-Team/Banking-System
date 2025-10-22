@@ -32,6 +32,11 @@ public class WebAccountController {
         return "dashboard"; // templates/dashboard.html
     }
 
+    @GetMapping("/addAccount")
+    public String addAccount() {
+        return "addAccount"; // templates/dashboard.html
+    }
+
     // Account creation form submission
     @PostMapping("/create-account")
     public String createAccount(@RequestParam String accountType,
