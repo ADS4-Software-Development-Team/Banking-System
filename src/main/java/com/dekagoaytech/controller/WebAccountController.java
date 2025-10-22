@@ -29,7 +29,7 @@ public class WebAccountController {
     // Dashboard page
     @GetMapping("/dashboard")
     public String showDashboard() {
-        return "dashboard"; // templates/dashboard.html
+        return "addAccount"; // templates/dashboard.html
     }
 
     @GetMapping("/addAccount")
@@ -53,6 +53,6 @@ public class WebAccountController {
                                 Model model) {
 
         // For now, just redirect to dashboard after submission
-        return "redirect:/dashboard";
+        return "redirect:/addAccount";
     }
 }
