@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -798,7 +798,7 @@
 <body>
 <div class="sidebar">
     <div class="logo">
-        <div class="logo-icon">🏦</div>
+        <div class="logo-icon"></div>
         <h1>DekagoBank</h1>
     </div>
     <nav>
@@ -809,15 +809,15 @@
         </ul>
     </nav>
     <div class="user-info">
-        <div class="user-avatar">JS</div>
-        <span>John Smith</span>
+        <div class="user-avatar"></div>
+        <span><span th:text="${name} "></span>
     </div>
 </div>
 
 <div class="content-wrapper">
     <header>
         <div class="header-container">
-            <h2>Welcome back, John</h2>
+            <h2>Welcome back,  <span th:text="${name} + ' :' + ${id}"></span></h2>
         </div>
         <div class="header-actions">
             <div class="notification-icon">
@@ -826,7 +826,7 @@
             </div>
             <div class="user-info">
                 <div class="user-avatar">JS</div>
-                <span>John Smith</span>
+                <span><span th:text="${name} "></span>
             </div>
         </div>
     </header>
