@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dekago Bank | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="container header-container">
+        <div class="logo">
+            <i class="fas fa-university"></i>
+            <span>Dekago Bank</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/openAccount">Open Account</a></li>
+                <li><a href="/login">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="dashboard-section">
+    <div class="container">
+        <h1>Good Day, User!</h1>
+        <p>Manage your accounts and transactions efficiently below:</p>
+
+        <!-- Accounts Overview -->
+        <section class="account-overview">
+            <h2>Your Accounts</h2>
+            <div class="accounts-grid">
+                <div class="account-card">
+                    <h3>Primary Savings</h3>
+                    <p>Type: Savings</p>
+                    <p>Balance: <strong>R5,000.00</strong></p>
+                    <div class="account-actions">
+                        <button class="btn btn-light"><i class="fas fa-arrow-down"></i> Deposit</button>
+                        <button class="btn btn-light"><i class="fas fa-arrow-up"></i> Withdraw</button>
+                        <button class="btn btn-light"><i class="fas fa-exchange-alt"></i> Transfer</button>
+                    </div>
+                </div>
+                <!-- More accounts can be added dynamically -->
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section class="transaction-section">
+            <h2>Perform Transaction</h2>
+            <form id="transactionForm" class="transaction-form">
+                <div class="form-group">
+                    <label for="accountSelect">Select Account <span class="required">*</span></label>
+                    <select id="accountSelect" required>
+                        <option value="">Primary Savings</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="transactionType">Transaction Type <span class="required">*</span></label>
+                    <select id="transactionType" required>
+                        <option value="">Select Type</option>
+                        <option value="deposit">Deposit</option>
+                        <option value="withdraw">Withdraw</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount (R) <span class="required">*</span></label>
+                    <input type="number" id="amount" min="1" required>
+                </div>
+
+                <div class="form-group" id="transferToDiv" style="display:none;">
+                    <label for="transferTo">Transfer To <span class="required">*</span></label>
+                    <input type="text" id="transferTo" placeholder="Recipient Account Name">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <p id="transactionMessage" class="transaction-message"></p>
+            </form>
+        </section>
+
+        <!-- Recent Transactions -->
+        <section class="recent-transactions">
+            <h2>Recent Transactions</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Account</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                <tr>
+                    <td>2025-10-21</td>
+                    <td>Primary Savings</td>
+                    <td>Deposit</td>
+                    <td>R1,200.00</td>
+                    <td>R5,000.00</td>
+                </tr>
+                <!-- Transactions added dynamically -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="container footer-container">
+        <p>&copy; 2025 Dekago Bank. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('transactionType').addEventListener('change', function() {
+        document.getElementById('transferToDiv').style.display =
+            this.value === 'transfer' ? 'block' : 'none';
+    });
+
+    document.getElementById('transactionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const type = document.getElementById('transactionType').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        if (type === 'withdraw' && amount > 5000) {
+            document.getElementById('transactionMessage').innerText =
+                "Error: Overdraft not allowed!";
+            document.getElementById('transactionMessage').style.color = "red";
+        } else {
+            document.getElementById('transactionMessage').innerText =
+                `Success: ${type} of R${amount.toFixed(2)} completed!`;
+            document.getElementById('transactionMessage').style.color = "green";
+        }
+    });
+</script>
+
+</body>
+</html>
